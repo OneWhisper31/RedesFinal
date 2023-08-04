@@ -76,5 +76,10 @@ public class MainMenuHandler : MonoBehaviour
         _hostGamePanel?.SetActive(false);
         _seshListHandler?.gameObject.SetActive(true);
     }
+    public void BTN_CloseGame()
+    {
+        Application.Quit();
+        Debug.Log("Quit");
+    }
 
 }
