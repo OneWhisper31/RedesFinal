@@ -6,21 +6,29 @@ using Fusion;
 using System;
 public class DisplayOrder : NetworkBehaviour
 {
-    public NetworkObject IngredientDisplay;
-    public Transform displayPlace;
+    public GameObject IngredientDisplay;
+    public Transform DisplayPlace;
+    public CarBehaviour MyDaddyBehaviour;
 
-    //[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void DisplayOrders(List<Tuple<Ingredient, NetworkBool>> ingredients)
+    public DisplayOrder Initialize(CarBehaviour car)
     {
-        foreach (var ingredient in ingredients)
-        {
-            if(ingredient.Item2)
-            {
-                print(ingredient.Item1);
-                var ing = FindObjectOfType<NetworkRunner>().Spawn(IngredientDisplay);
-                ing.transform.parent = displayPlace;
-                IngredientDisplay.GetComponent<Image>().sprite = ingredient.Item1.image;
-            }
-        }
+        MyDaddyBehaviour = car;
+        return this;
     }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_DisplayOrders(CarBehaviour car)
+    {
+        foreach (var ingredient in car.ingredientsOrder)
+        {
+            if (ingredient.Item2)
+            {
+                var ing = Instantiate(IngredientDisplay);
+                ing.transform.SetParent(DisplayPlace, false);
+                ing.GetComponent<Image>().sprite = ingredient.Item1.image;
+            }
+        }           
+    }
+
+
 }

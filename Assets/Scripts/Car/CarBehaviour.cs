@@ -8,19 +8,18 @@ public class CarBehaviour : NetworkBehaviour
 {
     public NetworkBool hasOrdered;
     Animator animator;
-    OrderObject myOrder;
-    DisplayOrder myDisplayOrder;
 
 
+    [SerializeField] DisplayOrder myDisplayOrder;
     [SerializeField] GameObject Canvas;
-    [SerializeField] GameObject Order;
+    [SerializeField] NetworkObject Order;
     [SerializeField] List<Ingredient> myIngredients;
-    [SerializeField] List<Tuple<Ingredient, NetworkBool>> ingredientsOrder;
+    [SerializeField] public List<Tuple<Ingredient, NetworkBool>> ingredientsOrder;
 
     [Networked, Capacity(5)]
     public NetworkArray<NetworkBool> decidedIngredients { get; }
 
-    void Start()
+    public override void Spawned()
     {
         animator = GetComponent<Animator>();
         Initialize();
@@ -48,28 +47,41 @@ public class CarBehaviour : NetworkBehaviour
 
     public void OrderFood()
     {
-        if(NetworkPlayer.Local.HasStateAuthority)
+
+        if (Runner.IsServer)
         {
-            RPC_OrderFood();
+            myDisplayOrder = Runner.Spawn(Order).GetBehaviour<DisplayOrder>();
+            RPC_OrderFood(myDisplayOrder);
         }
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_OrderFood()
+    public void RPC_OrderFood(DisplayOrder order)
     {
         hasOrdered = true;
         RPC_GenerateRandomIngredients();
-        myOrder = Instantiate(Order).GetComponent<OrderObject>();
-        myDisplayOrder = myOrder.GetComponentInChildren<DisplayOrder>();
 
+        order.Initialize(this);
 
-        myOrder.transform.SetParent(Canvas.transform, false);
-        Order.SetActive(true);
-        ingredientsOrder = myOrder.GenerateOrder(myIngredients, decidedIngredients);
+        order.transform.SetParent(Canvas.transform, false);
+        order.gameObject.SetActive(true);
+        ingredientsOrder = GenerateOrder(myIngredients, decidedIngredients);
 
-        myDisplayOrder.gameObject.SetActive(true);
-        myDisplayOrder.DisplayOrders(ingredientsOrder);
+        order.gameObject.SetActive(true);
+        order.RPC_DisplayOrders(this);
 
+    }
+
+    public List<Tuple<Ingredient, NetworkBool>> GenerateOrder(List<Ingredient> ingredients, NetworkArray<NetworkBool> decidedIngredients)
+    {
+
+        var order = new List<Tuple<Ingredient, NetworkBool>>();
+
+        for (int i = 0; i < ingredients.Count; i++)
+        {
+            order.Add(Tuple.Create(ingredients[i], decidedIngredients[i]));
+        }
+        return order;
     }
 
     void FoodOrdered()

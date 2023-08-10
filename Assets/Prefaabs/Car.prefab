@@ -222,7 +222,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4166563676789594464}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.17, y: 1.608, z: -7.09}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -266,7 +266,7 @@ MonoBehaviour:
   TriggerHashes: 00000000
 --- !u!95 &4166563676789594465
 Animator:
-  serializedVersion: 5
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -283,8 +283,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &4166563676789594468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,13 +300,14 @@ MonoBehaviour:
   hasOrdered:
     _value: 0
   Canvas: {fileID: 5603770629284828079}
-  Order: {fileID: 4999483988667476209, guid: 65e70d9b5cae1b444b1c4f13946761d6, type: 3}
+  Order: {fileID: 5690195714157640142, guid: 65e70d9b5cae1b444b1c4f13946761d6, type: 3}
   myIngredients:
   - {fileID: 4476918509612097239, guid: b794fc3689cb95547a165e629b0e3680, type: 3}
   - {fileID: 6134208462275204833, guid: 0fb5c9548c001b345b8afc08a7826e78, type: 3}
   - {fileID: 861055706939368611, guid: 34effb824cb2d694bbaf483fe8f27bc5, type: 3}
   - {fileID: 8100269592988025529, guid: 07f61debc07713043b979e115db54a58, type: 3}
   - {fileID: 1967162693591470251, guid: d473930ebfd989a48b134a3880b0a5da, type: 3}
+  _decidedIngredients: []
 --- !u!114 &4166563676789594474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -555,18 +555,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5603770629284828079}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.23824424, y: -0.37741724, z: 0.10112866, w: 0.8891394}
+  m_LocalPosition: {x: 0, y: 0, z: -0.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4166563676789594471}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: -46, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -0.1, y: 4.87}
+  m_SizeDelta: {x: 7.7327, y: 6.4095}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &6330952795815200496
 Canvas:
@@ -587,7 +587,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 25
   m_TargetDisplay: 0
 --- !u!114 &6645149454773487343
 MonoBehaviour:

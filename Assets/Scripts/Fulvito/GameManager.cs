@@ -92,6 +92,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         changed.Behaviour._timerText.text = $"{TimeSpan.FromSeconds(changed.Behaviour._timer).ToString(@"m\:ss")}";
     }
 
+
     IEnumerator StartGame()
     {
         _matchStarted = true;

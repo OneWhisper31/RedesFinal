@@ -16,7 +16,8 @@ public class Dispenser : NetworkBehaviour
     [Networked(OnChanged = nameof(OnChangeStay))]
     NetworkBool isInside { get; set; }
 
-    private void Start()
+
+    public override void Spawned()
     {
         ingredientImage = myIngredient.image;
         image.GetComponent<Image>().sprite = ingredientImage;

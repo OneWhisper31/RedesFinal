@@ -18,12 +18,6 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         {
             Debug.Log("Player Joined, I'm the server/host");
             runner.Spawn(_playerPrefab, new Vector3(-5, 0.8f,0), null, player);
-            //var _player = runner.Spawn(_playerPrefab, null, null, player);
-            /* (runner.SessionInfo.PlayerCount % 2 == 0)
-            {
-                _player.GetComponentInChildren<Renderer>().material.color = Color.blue;
-            }
-            else _player.GetComponentInChildren<Renderer>().material.color = Color.red;*/
         }
         else
         {
