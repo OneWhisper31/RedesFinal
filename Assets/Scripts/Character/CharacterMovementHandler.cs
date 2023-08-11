@@ -22,14 +22,13 @@ public class CharacterMovementHandler : NetworkBehaviour
         {
             Vector3 moveDirection = new Vector3(networkInput.horizontalInput, 0f, networkInput.verticalInput);
 
-
             _myCharacterController.Move(moveDirection);
 
             //transform.position = new Vector3(transform.position.x, 0f, 0f);
 
             if (networkInput.isJumpPressed)
             {
-                _myCharacterController.Jump();
+                //_myCharacterController.Jump();
             }
 
             

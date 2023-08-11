@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 using Fusion;
 using TMPro;
 using Fusion.Sockets;
@@ -19,6 +20,10 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     public static Action AddScoreRed = () => Instance.redScore++;
     public static Action AddScoreBlue = () => Instance.blueScore++;*/
+
+    //Key: hashcode del Uid y tupla de la ref y los puntos
+
+    public Dictionary<PlayerRef, int> playersDic = new Dictionary<PlayerRef, int>();
 
     [Networked(OnChanged = nameof(OnScoreChange))]
     public int totalScore { get; set; }
@@ -43,8 +48,8 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         base.Spawned();
         Runner.AddCallbacks(this);
-        if (!Object.HasStateAuthority) return;
-        if (Instance) Destroy(Instance);
+
+        if (Instance) Destroy(this);
         else Instance = this;
     }
 
@@ -114,6 +119,49 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         foreach (var item in plates)
             item.SetPlateIngredients(list);
     }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_AddPoints(PlayerRef player, int pointsToAdd)
+    {
+        if (playersDic.ContainsKey(playersDic[player]))
+        {
+            playersDic[player]++;
+            Debug.Log(player + " " + playersDic[player]);
+        }
+    }
+
+
+    /*[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_AddDictionary(NetworkPlayer _player)
+    {
+        Debug.Log("add Dictio");
+
+        var hashP = Runner.GetPlayerUserId(_player.Runner.LocalPlayer);
+
+        Debug.Log(hashP);
+
+        if (!playersDic.ContainsKey(hashP.GetHashCode()))
+            playersDic.Add(hashP.GetHashCode(), Tuple.Create(_player.Runner.LocalPlayer,0));
+    }
+    
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_RemoveDictionary(NetworkPlayer _player)
+    {
+        Debug.Log("Replace Dictio");
+
+        var hashP = Runner.GetPlayerUserId(_player.Runner.LocalPlayer);
+
+        Debug.Log(hashP);
+
+        if (playersDic.ContainsKey(hashP.GetHashCode()))
+            playersDic.Remove(hashP.GetHashCode());
+
+        foreach (var item in playersDic)
+        {
+            Debug.Log(item.Key + " " + item.Value.Item1.name);
+        }
+    }*/
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
