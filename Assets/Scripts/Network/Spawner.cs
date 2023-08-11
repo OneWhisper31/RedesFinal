@@ -4,6 +4,7 @@ using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
 using System;
+using System.Linq;
 
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -14,15 +15,47 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     //Callback que se recibe cuando entra un nuevo Cliente a la sala
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        if (runner.IsServer)
+        var activePlayers = runner.ActivePlayers;
+
+        switch (runner.ActivePlayers.Count())
+        {
+            case 1:
+                break;
+            case 2:
+                if (runner.IsServer)
+                {
+                    int id = 0;
+
+                    GameManager.Instance.playersDic =
+                        activePlayers.Aggregate(new Dictionary<PlayerRef, int>(), (x, y) =>
+                        {
+                            id++;
+
+                            runner.Spawn(_playerPrefab, new Vector3(-5, 0.8f, 0), null, y);
+                            x.Add(y, 0);
+
+                            return x;
+                        });
+
+                }
+                else
+                {
+                    Debug.Log("[Custom Msg] Second Player Joined, I'm not the Host");
+                }
+                break;
+            default:
+                break;
+        }
+        /*if (runner.IsServer)
         {
             Debug.Log("Player Joined, I'm the server/host");
-            runner.Spawn(_playerPrefab, new Vector3(-5, 0.8f,0), null, player);
+
+            runner.Spawn(_playerPrefab, new Vector3(-5, 0.8f, 0), null, player);             
         }
         else
         {
             Debug.Log("Player Joined, I'm not the server/host");
-        }
+        }*/
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)

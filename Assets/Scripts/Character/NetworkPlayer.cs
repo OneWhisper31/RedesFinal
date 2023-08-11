@@ -40,12 +40,10 @@ public class NetworkPlayer : NetworkBehaviour
             else CanGrabItem = false;
         }
     }
-
     public override void Spawned()
     {
         CanGrabItem = true;
         //nickname = NicknameHandler.Instance.AddNickname(this);
-
         if (Object.HasInputAuthority)
         {
             Local = this;
