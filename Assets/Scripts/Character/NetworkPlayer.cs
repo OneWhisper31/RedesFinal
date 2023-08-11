@@ -15,18 +15,21 @@ public class NetworkPlayer : NetworkBehaviour
 
     public void GrabItem(Ingredient Item)
     {
-        Debug.Log("Grabbed");
-        if(CanGrabItem && myGrabbedIngredient == null)
+        if(myGrabbedIngredient == null)
         {
             myGrabbedIngredient = Runner.Spawn(Item);
+            if(Runner.IsServer)
+                RPC_SetIngPosition(myGrabbedIngredient);
             // = Item;
         }
     }
 
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    public void RPC_SetIngPosition()
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SetIngPosition(Ingredient ingredient)
     {
-        myGrabbedIngredient.transform.parent = GrabPos.transform;
+        myGrabbedIngredient = ingredient;
+        myGrabbedIngredient.transform.position = GrabPos.position;
+        myGrabbedIngredient.transform.parent = GrabPos;
     }
 
     public override void FixedUpdateNetwork()
