@@ -36,7 +36,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
                         {
                             id++;
 
-                            runner.Spawn(_playerPrefab, new Vector3(-5, 0.8f, 0), null, y);
+                            runner.Spawn(_playerPrefab, new Vector3(-5, 0.8f, id), null, y);
                             x.Add(y, 0);
 
                             return x;

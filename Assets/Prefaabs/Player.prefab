@@ -800,7 +800,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   Animator: {fileID: 4443021002237349262}
-  TotalWords: 1
+  TotalWords: 2
   SyncSettings: 79
   FloatAccuracy:
     _value: 0
@@ -814,8 +814,8 @@ MonoBehaviour:
     _value: 0
     _inverse: 0
     _hash: -814817977
-  StateHashes: 0000000025e1b6c2165293f52b1a167c79406955
-  TriggerHashes: 00000000
+  StateHashes: 0000000025e1b6c2165293f52b1a167c794069558fa6831d2ae264a2
+  TriggerHashes: 000000003459a8af
 --- !u!1 &3213665457630234873
 GameObject:
   m_ObjectHideFlags: 0
@@ -1538,7 +1538,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5188500371252123968}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 24a0c8df3fc8fbe4c897d8425b14c73e, type: 3}
   m_Controller: {fileID: 9100000, guid: b321a1e3d63b91c43896021927531f0a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
