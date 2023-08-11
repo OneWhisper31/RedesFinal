@@ -47,6 +47,8 @@ GameObject:
   - component: {fileID: 1827174080940466193}
   - component: {fileID: 4394584618066373065}
   - component: {fileID: -6748004619276566741}
+  - component: {fileID: 261507747839603563}
+  - component: {fileID: 3819518385238833525}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -128,6 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
+  pushManager: {fileID: 261507747839603563}
 --- !u!114 &3213665456724092847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,6 +209,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
+--- !u!65 &261507747839603563
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3213665456724092758}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6, y: 0.25, z: 0.45}
+  m_Center: {x: 0, y: 0, z: 0.64}
+--- !u!65 &3819518385238833525
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3213665456724092758}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6, y: 0.25, z: 0.45}
+  m_Center: {x: 0, y: 0, z: 0.64}
 --- !u!1 &3213665457630234873
 GameObject:
   m_ObjectHideFlags: 0
