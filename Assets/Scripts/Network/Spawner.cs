@@ -5,10 +5,12 @@ using Fusion;
 using Fusion.Sockets;
 using System;
 using System.Linq;
+using TMPro;
 
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] NetworkPlayer _playerPrefab;
+    [SerializeField] TextMeshProUGUI _waitText;
 
     CharacterInputHandler _characterInputHandler;
 
@@ -20,10 +22,13 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         switch (runner.ActivePlayers.Count())
         {
             case 1:
+                _waitText.gameObject.SetActive(true);
+                _waitText.text = "Waiting for players";
                 break;
             case 2:
                 if (runner.IsServer)
                 {
+                    _waitText.gameObject.SetActive(false);
                     int id = 0;
 
                     GameManager.Instance.playersDic =
@@ -31,7 +36,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
                         {
                             id++;
 
-                            runner.Spawn(_playerPrefab, new Vector3(-5, 0.8f, 0), null, y);
+                            runner.Spawn(_playerPrefab, new Vector3(-5, 0.8f, id), null, y);
                             x.Add(y, 0);
 
                             return x;
@@ -46,16 +51,18 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             default:
                 break;
         }
-        /*if (runner.IsServer)
+    }
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
+    {
+        if (runner.ActivePlayers.Count() > 3)
+            return;
+        //NetworkPlayer.Local.player.OnDisconected();
+        foreach (var item in FindObjectsOfType<NetworkPlayer>())
         {
-            Debug.Log("Player Joined, I'm the server/host");
-
-            runner.Spawn(_playerPrefab, new Vector3(-5, 0.8f, 0), null, player);             
+            item.OnDisconected();
         }
-        else
-        {
-            Debug.Log("Player Joined, I'm not the server/host");
-        }*/
+        _waitText.gameObject.SetActive(true);
+        _waitText.text = "Player 2 Disconnected. Waiting for new players.";
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
@@ -74,7 +81,6 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
 
     #region Unused callbacks
-    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
     public void OnConnectedToServer(NetworkRunner runner) { }

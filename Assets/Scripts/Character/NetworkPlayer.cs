@@ -88,6 +88,11 @@ public class NetworkPlayer : NetworkBehaviour
         }
 
     }
+    public void OnDisconected()
+    {
+        Runner.Despawn(this.Object);
+        Debug.LogWarning("Player Desconected");
+    }
 
     /*[Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     void RPC_SetNickname(string nick, RpcInfo info = default)
