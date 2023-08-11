@@ -9,8 +9,7 @@ public class CarBehaviour : NetworkBehaviour
     public NetworkBool hasOrdered;
     Animator animator;
 
-    [SerializeField] GameObject DeliverHitboxPrefab;
-    [SerializeField] Transform DeliverHitboxPivot;
+    [SerializeField] NetworkObject DeliverHitbox;
     [SerializeField] DisplayOrder myDisplayOrder;
     [SerializeField] GameObject Canvas;
     [SerializeField] NetworkObject Order;
@@ -104,7 +103,7 @@ public class CarBehaviour : NetworkBehaviour
     }
     public void OnWindow()
     {
-        Runner.Spawn(DeliverHitboxPrefab,DeliverHitboxPivot.position);
+        DeliverHitbox.gameObject.SetActive(true);
     }
     public void OnReset()
     {

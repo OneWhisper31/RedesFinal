@@ -9,13 +9,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4003220754919663942}
+  - component: {fileID: 3915830239218899444}
+  - component: {fileID: 5515160654048758645}
+  - component: {fileID: 975853920809278766}
   m_Layer: 0
   m_Name: WindowPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4003220754919663942
 Transform:
   m_ObjectHideFlags: 0
@@ -24,13 +27,64 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3681019245340293108}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.33, y: -0.86, z: -0}
+  m_LocalPosition: {x: -3.44, y: -0.86, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4166563676789594471}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3915830239218899444
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3681019245340293108}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.9014753, z: 1}
+  m_Center: {x: 0, y: -0.45073766, z: 0}
+--- !u!114 &5515160654048758645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3681019245340293108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectInterest: 1
+  DefaultInterestGroups: []
+  DestroyWhenStateAuthorityLeaves: 0
+  AllowStateAuthorityOverride: 1
+  AoiPositionSource: {fileID: 0}
+  Flags: 134145
+  NetworkGuid:
+    RawGuidValue: 00000000000000000000000000000000
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 975853920809278766}
+  SimulationBehaviours: []
+--- !u!114 &975853920809278766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3681019245340293108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09c2780bf94149e40a5d5067a9990a3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  carBehaviour: {fileID: 4166563676789594468}
 --- !u!1 &4166563676023345832
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,8 +385,7 @@ MonoBehaviour:
   _interpolationDataSource: 0
   hasOrdered:
     _value: 0
-  DeliverHitboxPrefab: {fileID: 8593916496108936077, guid: 83f4552708b55384393b478fb5348894, type: 3}
-  DeliverHitboxPivot: {fileID: 4003220754919663942}
+  DeliverHitbox: {fileID: 5515160654048758645}
   myDisplayOrder: {fileID: 0}
   Canvas: {fileID: 5603770629284828079}
   Order: {fileID: 5690195714157640142, guid: 65e70d9b5cae1b444b1c4f13946761d6, type: 3}
@@ -363,7 +416,8 @@ MonoBehaviour:
   Flags: 2305
   NetworkGuid:
     RawGuidValue: c9c59f81b0e48fa40aff4094d241f5e2
-  NestedObjects: []
+  NestedObjects:
+  - {fileID: 5515160654048758645}
   NetworkedBehaviours:
   - {fileID: 4166563676789594470}
   - {fileID: 4166563676789594468}
