@@ -120,11 +120,9 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         _gameCanvas.SetActive(true);
     }
 
-    /*[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     void RPC_OnRestartRound()
     {
-        
-    }*/
             if (Runner.IsServer&& !onEnd)
             {
                 onEnd = true;
@@ -174,7 +172,6 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         _timer = 10f;
             //RPC_OnRestartRound();
             print("Finished");
-        }
     }
     void SpawnPlates()
     {
