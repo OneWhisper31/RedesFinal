@@ -7,7 +7,7 @@ using Fusion;
 public class CarBehaviour : NetworkBehaviour
 {
     public NetworkBool hasOrdered;
-    Animator animator;
+    public Animator animator;
 
     [SerializeField] NetworkObject DeliverHitbox;
     [SerializeField] DisplayOrder myDisplayOrder;
@@ -109,7 +109,7 @@ public class CarBehaviour : NetworkBehaviour
     {
         animator.SetBool("isMealOrdered", false);
         animator.SetBool("hasMeal", false);
-
+        Object.gameObject.SetActive(false);
         //Initialize();
     }
 }

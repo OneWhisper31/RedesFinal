@@ -74,11 +74,18 @@ public class OrderTester : NetworkBehaviour
         }
         if (wrongPlate)
         {
-            print("Wrong Order");
+            //print("Wrong Order");
+            order.animator.SetBool("hasMeal", true);
+            StartCoroutine(GameManager.Instance.NextCar());
+
         }
         else
         {
             GameManager.Instance.RPC_AddPoints(player.Object.InputAuthority, 1);
+            StartCoroutine(GameManager.Instance.NextCar());
+
+            order.animator.SetBool("hasMeal", true);
+
         }
     }
 

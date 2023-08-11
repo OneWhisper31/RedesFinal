@@ -39,6 +39,10 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     [SerializeField] public GameObject _gameCanvas;
     [SerializeField] NetworkPlayer _playerPrefab;
     [SerializeField] NetworkObject _carPrefab;
+    [SerializeField] NetworkObject plate;
+    [SerializeField] List<PlateInteractor> plateInteractors;
+    [SerializeField] List<PlatePlacer> platePlacers;
+    [SerializeField] List<GameObject> plateSpawns;
     [SerializeField] List<Plate> plates;
 
     [Networked]
@@ -70,27 +74,59 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         if(_timer <= 0 && _matchStarted)
         {
             //RPC_OnRestartRound();
+            print("Finished");
         }
+    }
+    void SpawnPlates()
+    {
+        if (plates.Count > 0)
+        {
+            if(Runner.IsServer)
+                RPC_RemovePlates();
+        }
+        for (int j = 0; j < plateSpawns.Count; j++)
+        {
+            var newPlate = Runner.Spawn(plate).GetBehaviour<Plate>();
+            plates.Add(newPlate);
+            RPC_SpawnPlates(newPlate, j);
+        }
+    }
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_RemovePlates()
+    {
+        if (plates.Count > 0)
+        {
+            for (int i = 0; i < plates.Count; i++)
+            {
+                Runner.Despawn(plates[i].Object, true);
+                plates.RemoveAt(i);
+            }
+        }
+    }
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SpawnPlates(Plate newPlate, int interactorNumber)
+    {
+        newPlate.transform.position = plateSpawns[interactorNumber].transform.position;
+        newPlate.myPlatePlacer = platePlacers[interactorNumber].Object;
+        plateInteractors[interactorNumber].MyPlate = newPlate;
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     void RPC_OnStartMatch()
-    {    
-        _timer = 500f;
+    {
+        _timer = 180f;
         _gameCanvas.SetActive(true);
     }
 
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    /*[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     void RPC_OnRestartRound()
     {
-        _timer = 500f;
-    }
+        
+    }*/
 
     static void OnScoreChange(Changed<GameManager> changed)
     {
         changed.Behaviour._scoreText.text = $"{changed.Behaviour.totalScore}";
-        //spawn car
-        //changed.Behaviour.StartCoroutine(changed.Behaviour.restartCoroutine());
     }
 
     static void OnTimeChanged(Changed<GameManager> changed)
@@ -103,15 +139,18 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         _matchStarted = true;
         yield return new WaitForSeconds(3);
+        if(Runner.IsServer)
+            SpawnPlates();
         Runner.Spawn(_carPrefab);
         RPC_OnStartMatch();
     }
 
-    IEnumerator RestartGame()
+    public IEnumerator NextCar()
     {
         yield return new WaitForSeconds(1);
+        SpawnPlates();
         Runner.Spawn(_carPrefab);
-        RPC_OnRestartRound();
+        //RPC_OnRestartRound();
     }
 
     /*public void SetPlatesRecipe(List<Tuple<Ingredient, NetworkBool>> list)
@@ -126,6 +165,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         if (playersDic.ContainsKey(playersDic[player]))
         {
             playersDic[player]+= pointsToAdd;
+            totalScore += pointsToAdd;
             Debug.Log(player + " " + playersDic[player]);
         }
     }
