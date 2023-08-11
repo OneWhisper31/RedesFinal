@@ -24,6 +24,8 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     //Key: hashcode del Uid y tupla de la ref y los puntos
 
     public Dictionary<PlayerRef, int> playersDic = new Dictionary<PlayerRef, int>();
+    [SerializeField] LeaderBoardDataSaver textPlayerLeaderboard;
+    [SerializeField] Canvas CanvasEnd;
 
     [Networked(OnChanged = nameof(OnScoreChange))]
     public int totalScore { get; set; }
@@ -56,7 +58,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         if (Instance) Destroy(this);
         else Instance = this;
     }
-
+    bool onEnd = false;
     public override void FixedUpdateNetwork()
     {
         //StartMatch();
@@ -123,6 +125,103 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         
     }*/
+            if (Runner.IsServer&& !onEnd)
+            {
+                onEnd = true;
+                int i = 0;
+                playersDic.Select(x =>
+                {
+                    var y = Runner.Spawn(textPlayerLeaderboard, Vector3.up * -i * 70);
+                    y.transform.parent = CanvasEnd.transform;
+
+                    y.playerRef = x.Key;
+                    y.score = x.Value;
+                    
+                    var yText = y.GetComponent<TextMeshProUGUI>();
+
+                    i++;
+                    yText.text = x.Key + ": " + x.Value + " Points";
+
+
+                    return y;
+                }).ToArray();
+
+                RPC_DecideWinner();
+            }
+        }
+    }
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    void RPC_DecideWinner()
+    {
+        var datasaver = FindObjectsOfType<LeaderBoardDataSaver>();
+
+        foreach (var item in datasaver)
+        {
+            TextMeshProUGUI text = item.GetComponent<TextMeshProUGUI>();
+
+            if(item.playerRef==Runner.LocalPlayer)
+                text.color = Color.red;
+            else 
+                text.color = Color.white;
+
+        }
+    }
+
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    void RPC_OnStartMatch()
+    {    
+        _timer = 10f;
+            //RPC_OnRestartRound();
+            print("Finished");
+        }
+    }
+    void SpawnPlates()
+    {
+        if (plates.Count > 0)
+        {
+            if(Runner.IsServer)
+                RPC_RemovePlates();
+        }
+        for (int j = 0; j < plateSpawns.Count; j++)
+        {
+            var newPlate = Runner.Spawn(plate).GetBehaviour<Plate>();
+            plates.Add(newPlate);
+            RPC_SpawnPlates(newPlate, j);
+        }
+    }
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_RemovePlates()
+    {
+        if (plates.Count > 0)
+        {
+            for (int i = 0; i < plates.Count; i++)
+            {
+                Runner.Despawn(plates[i].Object, true);
+                plates.RemoveAt(i);
+            }
+        }
+    }
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SpawnPlates(Plate newPlate, int interactorNumber)
+    {
+        newPlate.transform.position = plateSpawns[interactorNumber].transform.position;
+        newPlate.myPlatePlacer = platePlacers[interactorNumber].Object;
+        plateInteractors[interactorNumber].MyPlate = newPlate;
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    void RPC_OnStartMatch()
+    {
+        _timer = 180f;
+        _gameCanvas.SetActive(true);
+    }
+
+    /*[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    void RPC_OnRestartRound()
+    {
+        _timer = 10f;
+    }
 
     static void OnScoreChange(Changed<GameManager> changed)
     {
@@ -138,6 +237,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     IEnumerator StartGame()
     {
         _matchStarted = true;
+        _timer = 10;
         yield return new WaitForSeconds(3);
         if(Runner.IsServer)
             SpawnPlates();
