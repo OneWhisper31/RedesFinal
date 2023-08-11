@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8177487743234075312}
   - component: {fileID: 4715566471180375525}
+  - component: {fileID: 2264791741917829807}
   m_Layer: 0
   m_Name: WindowPrefab
   m_TagString: Untagged
@@ -45,3 +46,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0.00000190735, y: 0, z: 0.0000019073495}
+--- !u!114 &2264791741917829807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8593916496108936077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0807bae876ff7944bb585bf768aaff82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

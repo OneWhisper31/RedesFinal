@@ -125,7 +125,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
         if (playersDic.ContainsKey(playersDic[player]))
         {
-            playersDic[player]++;
+            playersDic[player]+= pointsToAdd;
             Debug.Log(player + " " + playersDic[player]);
         }
     }
