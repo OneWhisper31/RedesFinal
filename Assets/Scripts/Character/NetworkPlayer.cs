@@ -9,20 +9,17 @@ public class NetworkPlayer : NetworkBehaviour
     public event System.Action OnLeft = delegate { };
 
     public Transform GrabPos;
-    public NetworkBool CanGrabItem;
+    public NetworkBool CanGrabItem = true;
 
     public Ingredient myGrabbedIngredient;
 
-    //NicknameText nickname;
-
-    /*[Networked(OnChanged = nameof(OnNicknameChanged))]
-    NetworkString<_16> NickName { get; set; }*/
-
-    public void GrabItem(GameObject Item)
+    public void GrabItem(Ingredient Item)
     {
+        Debug.Log("Grabbed");
         if(CanGrabItem && myGrabbedIngredient == null)
         {
-            myGrabbedIngredient = Runner.Spawn(Item, GrabPos.position, Quaternion.identity).GetComponent<Ingredient>();
+            myGrabbedIngredient = Runner.Spawn(Item);
+            // = Item;
         }
     }
 
@@ -46,9 +43,10 @@ public class NetworkPlayer : NetworkBehaviour
 
     public override void Spawned()
     {
+        CanGrabItem = true;
         //nickname = NicknameHandler.Instance.AddNickname(this);
 
-        if(Object.HasInputAuthority)
+        if (Object.HasInputAuthority)
         {
             Local = this;
 

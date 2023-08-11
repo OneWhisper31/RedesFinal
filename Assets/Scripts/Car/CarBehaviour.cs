@@ -53,6 +53,7 @@ public class CarBehaviour : NetworkBehaviour
             myDisplayOrder = Runner.Spawn(Order).GetBehaviour<DisplayOrder>();
             RPC_OrderFood(myDisplayOrder);
         }
+        GameManager.Instance.SetPlatesRecipe(ingredientsOrder);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -66,6 +67,7 @@ public class CarBehaviour : NetworkBehaviour
         order.transform.SetParent(Canvas.transform, false);
         order.gameObject.SetActive(true);
         ingredientsOrder = GenerateOrder(myIngredients, decidedIngredients);
+        
 
         order.gameObject.SetActive(true);
         order.RPC_DisplayOrders(this);

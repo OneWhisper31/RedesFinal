@@ -5,8 +5,5 @@ using UnityEngine;
 
 public class TomatoeDispenser : Dispenser
 {
-    void Update()
-    {
-        
-    }
+    
 }

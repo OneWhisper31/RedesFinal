@@ -34,6 +34,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     [SerializeField] public GameObject _gameCanvas;
     [SerializeField] NetworkPlayer _playerPrefab;
     [SerializeField] NetworkObject _carPrefab;
+    [SerializeField] List<Plate> plates;
 
     [Networked]
     public bool _matchStarted { get; set; }
@@ -106,6 +107,12 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         yield return new WaitForSeconds(1);
         Runner.Spawn(_carPrefab);
         RPC_OnRestartRound();
+    }
+
+    public void SetPlatesRecipe(List<Tuple<Ingredient, NetworkBool>> list)
+    {
+        foreach (var item in plates)
+            item.SetPlateIngredients(list);
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)

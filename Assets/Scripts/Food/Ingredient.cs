@@ -6,6 +6,14 @@ using Fusion;
 public abstract class Ingredient : NetworkBehaviour
 {
     public new string name;
-    public int id;
+    public IngredientType type;
     public Sprite image;
+}
+public enum IngredientType
+{   
+    Tomatoe,
+    Lettuce,
+    Drink,
+    Cheese,
+    Bread
 }

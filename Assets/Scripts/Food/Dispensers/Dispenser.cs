@@ -55,7 +55,11 @@ public class Dispenser : NetworkBehaviour
         var player = other.GetComponent<NetworkPlayer>();
         if(player != null)
         {
-            player.GrabItem(ingredientPrefab);
+            if (player.CanGrabItem)
+            {
+                player.GrabItem(myIngredient);
+            }
+            
         }
     }
 }

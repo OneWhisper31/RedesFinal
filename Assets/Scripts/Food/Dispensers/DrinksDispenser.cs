@@ -4,8 +4,5 @@ using UnityEngine;
 
 public class DrinksDispenser : Dispenser
 {
-    void Update()
-    {
-        
-    }
+    
 }

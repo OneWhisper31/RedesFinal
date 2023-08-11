@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   name: Cheese
-  id: 1
+  type: 3
   image: {fileID: 21300000, guid: 056ee72c467a4e24d87541d42839ca72, type: 3}
 --- !u!114 &-3541076418047176455
 MonoBehaviour:

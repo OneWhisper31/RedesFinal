@@ -4,8 +4,5 @@ using UnityEngine;
 
 public class BreadDispenser : Dispenser
 {
-    void Update()
-    {
-        
-    }
+    
 }
