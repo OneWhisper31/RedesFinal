@@ -13,10 +13,13 @@ public class NetworkPlayer : NetworkBehaviour
 
     public NetworkObject GrabbedObject;
 
+    NetworkMecanimAnimator Animator;
+
     public void GrabItem(NetworkObject Item)
     {
         if(GrabbedObject == null)
         {
+            Animator.SetTrigger("Grab");
             if (Item.GetBehaviour<Ingredient>() != null)
                 GrabbedObject = Runner.Spawn(Item);
             else GrabbedObject = Item;
@@ -57,10 +60,13 @@ public class NetworkPlayer : NetworkBehaviour
             }
             else CanGrabItem = false;
         }
+
+
     }
     public override void Spawned()
     {
         CanGrabItem = true;
+        Animator = GetBehaviour<NetworkMecanimAnimator>();
         //nickname = NicknameHandler.Instance.AddNickname(this);
         if (Object.HasInputAuthority)
         {

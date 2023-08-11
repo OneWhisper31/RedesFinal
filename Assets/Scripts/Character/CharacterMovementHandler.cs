@@ -11,10 +11,14 @@ public class CharacterMovementHandler : NetworkBehaviour
 
     NetworkCharacterControllerPrototype _myCharacterController;
 
+    public NetworkMecanimAnimator Animator;
+
+    float _movementValue;
     //NetworkMecanimAnimator _myCharacterAnim;
 
-    void Awake()
+    public override void Spawned()
     {
+        Animator = GetBehaviour<NetworkMecanimAnimator>();
         _myCharacterController = GetComponent<NetworkCharacterControllerPrototype>();
     }
 
@@ -37,8 +41,10 @@ public class CharacterMovementHandler : NetworkBehaviour
             {
                 //_myCharacterController.Jump();
             }
+            _movementValue = Mathf.Abs(_myCharacterController.Velocity.magnitude);
 
-            
+            Animator.Animator.SetFloat("MovementValue", _movementValue);
+
         }
     }
 
