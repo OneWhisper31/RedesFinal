@@ -78,7 +78,7 @@ public class OrderTester : NetworkBehaviour
         }
         else
         {
-            GameManager.Instance.RPC_AddPoints(player.Runner.LocalPlayer, 1);
+            GameManager.Instance.RPC_AddPoints(player.Object.InputAuthority, 1);
         }
     }
 
