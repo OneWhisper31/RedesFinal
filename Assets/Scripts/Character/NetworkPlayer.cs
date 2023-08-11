@@ -11,25 +11,40 @@ public class NetworkPlayer : NetworkBehaviour
     public Transform GrabPos;
     public NetworkBool CanGrabItem = true;
 
-    public Ingredient myGrabbedIngredient;
+    public NetworkObject GrabbedObject;
 
-    public void GrabItem(Ingredient Item)
+    public void GrabItem(NetworkObject Item)
     {
-        if(myGrabbedIngredient == null)
+        if(GrabbedObject == null)
         {
-            myGrabbedIngredient = Runner.Spawn(Item);
+            if (Item.GetBehaviour<Ingredient>() != null)
+                GrabbedObject = Runner.Spawn(Item);
+            else GrabbedObject = Item;
             if(Runner.IsServer)
-                RPC_SetIngPosition(myGrabbedIngredient);
+                RPC_SetIngPosition(GrabbedObject);
+
             // = Item;
         }
     }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_SetIngPosition(Ingredient ingredient)
+    public void LeaveItem()
     {
-        myGrabbedIngredient = ingredient;
-        myGrabbedIngredient.transform.position = GrabPos.position;
-        myGrabbedIngredient.transform.parent = GrabPos;
+        if (GrabbedObject != null)
+        {
+            if (GrabbedObject.GetBehaviour<Ingredient>() != null)
+                Runner.Despawn(GrabbedObject);
+            GrabbedObject = null;
+            //RPC_LeaveItem(myGrabbedIngredient);
+        }
+
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SetIngPosition(NetworkObject grab)
+    {
+        GrabbedObject = grab;
+        GrabbedObject.transform.position = GrabPos.position;
+        GrabbedObject.transform.parent = GrabPos;
     }
 
     public override void FixedUpdateNetwork()

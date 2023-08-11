@@ -143,8 +143,8 @@ MonoBehaviour:
   _interpolationDataSource: 0
   GrabPos: {fileID: 1589253970692589192}
   CanGrabItem:
-    _value: 1
-  myGrabbedIngredient: {fileID: 0}
+    _value: 0
+  GrabbedObject: {fileID: 0}
 --- !u!114 &1827174080940466193
 MonoBehaviour:
   m_ObjectHideFlags: 0

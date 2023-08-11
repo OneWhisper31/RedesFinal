@@ -114,11 +114,11 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         RPC_OnRestartRound();
     }
 
-    public void SetPlatesRecipe(List<Tuple<Ingredient, NetworkBool>> list)
+    /*public void SetPlatesRecipe(List<Tuple<Ingredient, NetworkBool>> list)
     {
         foreach (var item in plates)
             item.SetPlateIngredients(list);
-    }
+    }*/
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_AddPoints(PlayerRef player, int pointsToAdd)

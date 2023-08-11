@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 7240115514470247739}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   name: Tomato
-  id: 4
+  type: 0
   image: {fileID: 21300000, guid: 4d7e6e570e9d65a4c9a994783a0652e2, type: 3}
 --- !u!114 &-573489595285601802
 MonoBehaviour:

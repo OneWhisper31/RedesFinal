@@ -7,10 +7,22 @@ using System.Linq;
 
 public class Plate : NetworkBehaviour
 {
-    public Tuple<Ingredient, NetworkBool>[] listOrder;//itemsRequired
+
+
+    /*1-bread
+      2-cheese
+      3-drink
+      4-Lettuce
+      5-Tomatoe
+     */
+
+    [Networked, Capacity(5)]
+    public NetworkArray<NetworkBool> myIngredients { get; }
 
     [Networked(OnChanged = nameof(OnChangeStay))]
     NetworkBool isInside { get; set; }
+
+    public NetworkObject myPlatePlacer;
 
     static void OnChangeStay(Changed<Plate> changed)
     {
@@ -18,37 +30,6 @@ public class Plate : NetworkBehaviour
         changed.LoadOld();
         var oldBeh = changed.Behaviour;
         beh.isInside = !oldBeh.isInside;
-    }
-
-
-    //[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void SetPlateIngredients(List<Tuple<Ingredient, NetworkBool>> list)
-    {
-        //si todos se vuelven true, se genera el plato
-        listOrder = list.Where(x => x.Item2).Select(x=>Tuple.Create(x.Item1,(NetworkBool)false)).ToArray();
-
-        foreach (var item in listOrder)
-        {
-            Debug.Log(item.Item1.name);
-        }
-    }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_OnAddIngredient(Ingredient ingredient)
-    {
-        if (ingredient==null)
-            return;
-
-        if (listOrder.Any(x => ingredient.type == x.Item1.type))
-        {
-            listOrder= listOrder.Where(x => ingredient.type != x.Item1.type)
-                                .Append(Tuple.Create(ingredient, (NetworkBool)false)).ToArray();
-
-            Debug.Log("Añado");
-
-            if (listOrder.All(x => x.Item2))
-                Debug.Log("Plato Terminado");
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -67,19 +48,47 @@ public class Plate : NetworkBehaviour
             isInside = false;
         }
     }
+
     void OnTriggerStay(Collider other)
     {
         var player = other.GetComponent<NetworkPlayer>();
         if (player != null)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (player.CanGrabItem && player.GrabbedObject != null)
             {
-                if(Runner.IsServer)
-                    RPC_OnAddIngredient(player.myGrabbedIngredient);
-
-               // player.myGrabbedIngredient = null;
+                if(player.GrabbedObject.GetBehaviour<Ingredient>() != null)
+                {
+                    CheckFood(player.GrabbedObject.GetBehaviour<Ingredient>().type);
+                    player.LeaveItem();
+                }
             }
+            else if(player.CanGrabItem && player.GrabbedObject == null)
+            {
+                myPlatePlacer.gameObject.SetActive(true);
+                player.GrabItem(Object);
+            }
+        }
+    }
 
+    void CheckFood(IngredientType ingType)
+    {
+        switch (ingType)
+        {
+            case IngredientType.Bread:
+                myIngredients.Set(0, true);
+                break;
+            case IngredientType.Cheese:
+                myIngredients.Set(1, true);
+                break;
+            case IngredientType.Drink:
+                myIngredients.Set(2, true);
+                break;
+            case IngredientType.Lettuce:
+                myIngredients.Set(3, true);
+                break;
+            case IngredientType.Tomatoe:
+                myIngredients.Set(4, true);
+                break;
         }
     }
 }
