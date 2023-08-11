@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3681019245340293108
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4003220754919663942}
+  m_Layer: 0
+  m_Name: WindowPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4003220754919663942
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3681019245340293108}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.33, y: -0.86, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4166563676789594471}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4166563676023345832
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,6 +262,7 @@ Transform:
   - {fileID: 4166563677497305530}
   - {fileID: 4166563677999452009}
   - {fileID: 3912250497248901408}
+  - {fileID: 4003220754919663942}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -299,6 +331,9 @@ MonoBehaviour:
   _interpolationDataSource: 0
   hasOrdered:
     _value: 0
+  DeliverHitboxPrefab: {fileID: 8593916496108936077, guid: 83f4552708b55384393b478fb5348894, type: 3}
+  DeliverHitboxPivot: {fileID: 4003220754919663942}
+  myDisplayOrder: {fileID: 0}
   Canvas: {fileID: 5603770629284828079}
   Order: {fileID: 5690195714157640142, guid: 65e70d9b5cae1b444b1c4f13946761d6, type: 3}
   myIngredients:

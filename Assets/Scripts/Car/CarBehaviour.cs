@@ -9,7 +9,8 @@ public class CarBehaviour : NetworkBehaviour
     public NetworkBool hasOrdered;
     Animator animator;
 
-
+    [SerializeField] GameObject DeliverHitboxPrefab;
+    [SerializeField] Transform DeliverHitboxPivot;
     [SerializeField] DisplayOrder myDisplayOrder;
     [SerializeField] GameObject Canvas;
     [SerializeField] NetworkObject Order;
@@ -34,6 +35,8 @@ public class CarBehaviour : NetworkBehaviour
         }
         return this;
     }
+
+
     [Rpc(RpcSources.StateAuthority, RpcTargets.StateAuthority)]
     public void RPC_GenerateRandomIngredients()
     {
@@ -53,6 +56,7 @@ public class CarBehaviour : NetworkBehaviour
             myDisplayOrder = Runner.Spawn(Order).GetBehaviour<DisplayOrder>();
             RPC_OrderFood(myDisplayOrder);
         }
+        StartCoroutine(FoodOrdered());
         //GameManager.Instance.SetPlatesRecipe(ingredientsOrder);
     }
 
@@ -73,6 +77,13 @@ public class CarBehaviour : NetworkBehaviour
         order.RPC_DisplayOrders(this);
 
     }
+    public override void FixedUpdateNetwork()
+    {
+        base.FixedUpdateNetwork();
+
+        if (myDisplayOrder != null)
+            myDisplayOrder.transform.LookAt(Camera.main.transform);
+    }
 
     public List<Tuple<Ingredient, NetworkBool>> GenerateOrder(List<Ingredient> ingredients, NetworkArray<NetworkBool> decidedIngredients)
     {
@@ -86,9 +97,20 @@ public class CarBehaviour : NetworkBehaviour
         return order;
     }
 
-    void FoodOrdered()
+    IEnumerator FoodOrdered()
     {
+        yield return new WaitForSeconds(5f);
         animator.SetBool("isMealOrdered", true);
     }
+    public void OnWindow()
+    {
+        Runner.Spawn(DeliverHitboxPrefab,DeliverHitboxPivot.position);
+    }
+    public void OnReset()
+    {
+        animator.SetBool("isMealOrdered", false);
+        animator.SetBool("hasMeal", false);
 
+        //Initialize();
+    }
 }
