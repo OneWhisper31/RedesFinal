@@ -20,12 +20,9 @@ public class NetworkPlayer : NetworkBehaviour
         if(GrabbedObject == null)
         {
             Animator.SetTrigger("Grab");
-            if(Item != null)
-            {
-                if (Item.GetBehaviour<Ingredient>() != null)
-                    GrabbedObject = Runner.Spawn(Item);
-                else GrabbedObject = Item;
-            }
+            if (Item.GetBehaviour<Ingredient>() != null)
+                GrabbedObject = Runner.Spawn(Item);
+            else GrabbedObject = Item;
             if(Runner.IsServer)
                 RPC_SetIngPosition(GrabbedObject);
 
