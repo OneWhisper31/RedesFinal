@@ -44,7 +44,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     [SerializeField] List<PlatePlacer> platePlacers;
     [SerializeField] List<GameObject> plateSpawns;
     [SerializeField] List<Plate> plates;
-
+    [SerializeField] WinLoseHandler winLoseHandler;
     [SerializeField] LeaderBoardDataSaver textPlayerLeaderboard;
     [SerializeField] Canvas CanvasEnd;
     bool onEnd = false;
@@ -75,12 +75,15 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         if(_timerText.isActiveAndEnabled && _timer >= 0)
             _timer -= Time.fixedDeltaTime;
 
-        if(_timer <= 0 && _matchStarted)
+        if(_timer <= 0 && _matchStarted&& !onEnd)
         {
             //RPC_OnRestartRound();
+            onEnd = true;
+            winLoseHandler.gameObject.SetActive(true);
             print("Finished");
         }
     }
+
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     void RPC_OnRestartRound()
@@ -88,7 +91,8 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         if (Runner.IsServer && !onEnd)
         {
             onEnd = true;
-            int i = 0;
+            winLoseHandler.gameObject.SetActive(true);
+            /*int i = 0;
             playersDic.Select(x =>
             {
                 var y = Runner.Spawn(textPlayerLeaderboard, Vector3.up * -i * 70);
@@ -106,7 +110,8 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
                 return y;
             }).ToArray();
 
-            RPC_DecideWinner();
+            RPC_DecideWinner();*/
+
         }
     }
 
@@ -166,7 +171,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     void RPC_OnStartMatch()
     {
-        _timer = 180f;
+        _timer = 10f;
         _gameCanvas.SetActive(true);
     }
 
