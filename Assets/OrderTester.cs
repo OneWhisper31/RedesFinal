@@ -16,6 +16,9 @@ public class OrderTester : NetworkBehaviour
     public CarBehaviour carBehaviour;
 
     [Networked]
+    NetworkBool tested { get; set; }
+
+    [Networked]
     NetworkBool wrongPlate { get; set; }
     static void OnChangeStay(Changed<OrderTester> changed)
     {
@@ -52,7 +55,12 @@ public class OrderTester : NetworkBehaviour
                 if (player.GrabbedObject.GetBehaviour<Plate>())
                 {
                     grabbedPlate = player.GrabbedObject.GetBehaviour<Plate>();
-                    TestOrder(grabbedPlate, carBehaviour, player);
+
+                    if(tested == false)
+                    {
+                        TestOrder(grabbedPlate, carBehaviour, player);
+                        tested = true;
+                    }
 
                     if (Runner.IsServer)
                         RPC_SetPlatePosition(player);
@@ -81,9 +89,10 @@ public class OrderTester : NetworkBehaviour
         }
         else
         {
+            print(GameManager.Instance);
             GameManager.Instance.RPC_AddPoints(player.Object.InputAuthority, 1);
-            StartCoroutine(GameManager.Instance.NextCar());
 
+            StartCoroutine(GameManager.Instance.NextCar());
             order.animator.SetBool("hasMeal", true);
 
         }

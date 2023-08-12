@@ -108,40 +108,41 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
             RPC_DecideWinner();
         }
-}
-
-[Rpc(RpcSources.All, RpcTargets.All)]
-void RPC_DecideWinner()
-{
-    var datasaver = FindObjectsOfType<LeaderBoardDataSaver>();
-
-    foreach (var item in datasaver)
-    {
-        TextMeshProUGUI text = item.GetComponent<TextMeshProUGUI>();
-
-        if (item.playerRef == Runner.LocalPlayer)
-            text.color = Color.red;
-        else
-            text.color = Color.white;
-
     }
-}
 
-
-void SpawnPlates()
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    void RPC_DecideWinner()
     {
-        if (plates.Count > 0)
+        var datasaver = FindObjectsOfType<LeaderBoardDataSaver>();
+
+        foreach (var item in datasaver)
         {
-            if(Runner.IsServer)
-                RPC_RemovePlates();
-        }
-        for (int j = 0; j < plateSpawns.Count; j++)
-        {
-            var newPlate = Runner.Spawn(plate).GetBehaviour<Plate>();
-            plates.Add(newPlate);
-            RPC_SpawnPlates(newPlate, j);
+            TextMeshProUGUI text = item.GetComponent<TextMeshProUGUI>();
+
+            if (item.playerRef == Runner.LocalPlayer)
+                text.color = Color.red;
+            else
+                text.color = Color.white;
+
         }
     }
+
+
+    void SpawnPlates()
+        {
+            if (plates.Count > 0)
+            {
+                if(Runner.IsServer)
+                    RPC_RemovePlates();
+            }
+            for (int j = 0; j < plateSpawns.Count; j++)
+            {
+                
+                var newPlate = Runner.Spawn(plate).GetBehaviour<Plate>();
+                plates.Add(newPlate);
+                RPC_SpawnPlates(newPlate, j);
+            }
+        }
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     public void RPC_RemovePlates()
     {
@@ -193,7 +194,8 @@ void SpawnPlates()
     public IEnumerator NextCar()
     {
         yield return new WaitForSeconds(1);
-        SpawnPlates();
+        if (Runner.IsServer)
+            SpawnPlates();
         Runner.Spawn(_carPrefab);
         //RPC_OnRestartRound();
     }
@@ -207,7 +209,7 @@ void SpawnPlates()
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void RPC_AddPoints(PlayerRef player, int pointsToAdd)
     {
-        if (playersDic.ContainsKey(playersDic[player]))
+        if (playersDic.ContainsKey(player))
         {
             playersDic[player]+= pointsToAdd;
             totalScore += pointsToAdd;
@@ -215,38 +217,6 @@ void SpawnPlates()
         }
     }
 
-
-    /*[Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void RPC_AddDictionary(NetworkPlayer _player)
-    {
-        Debug.Log("add Dictio");
-
-        var hashP = Runner.GetPlayerUserId(_player.Runner.LocalPlayer);
-
-        Debug.Log(hashP);
-
-        if (!playersDic.ContainsKey(hashP.GetHashCode()))
-            playersDic.Add(hashP.GetHashCode(), Tuple.Create(_player.Runner.LocalPlayer,0));
-    }
-    
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_RemoveDictionary(NetworkPlayer _player)
-    {
-        Debug.Log("Replace Dictio");
-
-        var hashP = Runner.GetPlayerUserId(_player.Runner.LocalPlayer);
-
-        Debug.Log(hashP);
-
-        if (playersDic.ContainsKey(hashP.GetHashCode()))
-            playersDic.Remove(hashP.GetHashCode());
-
-        foreach (var item in playersDic)
-        {
-            Debug.Log(item.Key + " " + item.Value.Item1.name);
-        }
-    }*/
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
