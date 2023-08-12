@@ -108,8 +108,8 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
             RPC_DecideWinner();
         }
-    }
 }
+
 [Rpc(RpcSources.All, RpcTargets.All)]
 void RPC_DecideWinner()
 {
@@ -168,12 +168,6 @@ void SpawnPlates()
         _timer = 180f;
         _gameCanvas.SetActive(true);
     }
-
-    /*[Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    void RPC_OnRestartRound()
-    {
-        
-    }*/
 
     static void OnScoreChange(Changed<GameManager> changed)
     {
