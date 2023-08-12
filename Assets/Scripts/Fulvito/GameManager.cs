@@ -45,7 +45,11 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     [SerializeField] List<GameObject> plateSpawns;
     [SerializeField] List<Plate> plates;
 
-    [Networked]
+    [SerializeField] LeaderBoardDataSaver textPlayerLeaderboard;
+    [SerializeField] Canvas CanvasEnd;
+    bool onEnd = false;
+
+[Networked]
     public bool _matchStarted { get; set; }
 
     public override void Spawned()
@@ -77,7 +81,54 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
             print("Finished");
         }
     }
-    void SpawnPlates()
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    void RPC_OnRestartRound()
+    {
+        if (Runner.IsServer && !onEnd)
+        {
+            onEnd = true;
+            int i = 0;
+            playersDic.Select(x =>
+            {
+                var y = Runner.Spawn(textPlayerLeaderboard, Vector3.up * -i * 70);
+                y.transform.parent = CanvasEnd.transform;
+
+                y.playerRef = x.Key;
+                y.score = x.Value;
+
+                var yText = y.GetComponent<TextMeshProUGUI>();
+
+                i++;
+                yText.text = x.Key + ": " + x.Value + " Points";
+
+
+                return y;
+            }).ToArray();
+
+            RPC_DecideWinner();
+        }
+    }
+}
+[Rpc(RpcSources.All, RpcTargets.All)]
+void RPC_DecideWinner()
+{
+    var datasaver = FindObjectsOfType<LeaderBoardDataSaver>();
+
+    foreach (var item in datasaver)
+    {
+        TextMeshProUGUI text = item.GetComponent<TextMeshProUGUI>();
+
+        if (item.playerRef == Runner.LocalPlayer)
+            text.color = Color.red;
+        else
+            text.color = Color.white;
+
+    }
+}
+
+
+void SpawnPlates()
     {
         if (plates.Count > 0)
         {
